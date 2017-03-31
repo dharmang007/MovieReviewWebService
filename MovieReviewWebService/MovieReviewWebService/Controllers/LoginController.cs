@@ -8,13 +8,10 @@ namespace MovieReviewWebService.Controllers
 {
     public class LoginController : ApiController
     {
-        DataClasses1DataContext dc = new DataClasses1DataContext("Server=tcp:dharmangsolanki.database.windows.net,1433;Initial Catalog=MovieReview;Persist Security Info=False;User ID=dharmang;Password=JamesBond007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-
-      
+        DataClasses1DataContext dc = new DataClasses1DataContext("Server=tcp:dharmangsolanki.database.windows.net,1433;Initial Catalog=MovieReview;Persist Security Info=False;User ID=dharmang;Password=JamesBond007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");      
         [Route("login/get")]
-        [HttpGet
-            ]
-        public bool login(string email,string pword )
+        [HttpGet]
+        public bool login([FromUri]string email,string pword )
         {
             try
             {
