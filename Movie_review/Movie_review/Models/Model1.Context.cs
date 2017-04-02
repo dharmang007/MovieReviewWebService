@@ -13,10 +13,10 @@ namespace Movie_review.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class WebServiceEntities : DbContext
+    public partial class WebServiceEntities2 : DbContext
     {
-        public WebServiceEntities()
-            : base("name=WebServiceEntities")
+        public WebServiceEntities2()
+            : base("name=WebServiceEntities2")
         {
         }
     

@@ -150,7 +150,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="WebServiceEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="WebServiceEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="admins" EntityType="Self.admin" />
           <EntitySet Name="movies" EntityType="Self.movie" />
           <EntitySet Name="reviews" EntityType="Self.review" />
@@ -169,7 +169,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="WebServiceModelStoreContainer" CdmEntityContainer="WebServiceEntities">
+        <EntityContainerMapping StorageEntityContainer="WebServiceModelStoreContainer" CdmEntityContainer="WebServiceEntities2">
           <EntitySetMapping Name="admins">
             <EntityTypeMapping TypeName="WebServiceModel.admin">
               <MappingFragment StoreEntitySet="admin">

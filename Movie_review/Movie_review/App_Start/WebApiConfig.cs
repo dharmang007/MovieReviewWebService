@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-
+using Newtonsoft.Json;
 namespace Movie_review
 {
     public static class WebApiConfig
@@ -17,8 +17,12 @@ namespace Movie_review
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+                defaults: new { id = RouteParameter.Optional });
+
+            var json = config.Formatters.JsonFormatter;
+            json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+           
         }
     }
 }
