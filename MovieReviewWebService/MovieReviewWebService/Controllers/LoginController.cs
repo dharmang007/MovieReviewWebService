@@ -32,6 +32,7 @@ namespace MovieReviewWebService.Controllers
             }
             catch (Exception e)
             {
+
                 throw e;
             }
         }

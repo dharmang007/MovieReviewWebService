@@ -33,6 +33,12 @@ namespace MovieReviewWebService
     partial void InsertUserInfo(UserInfo instance);
     partial void UpdateUserInfo(UserInfo instance);
     partial void DeleteUserInfo(UserInfo instance);
+    partial void InsertMovie(Movie instance);
+    partial void UpdateMovie(Movie instance);
+    partial void DeleteMovie(Movie instance);
+    partial void InsertReview(Review instance);
+    partial void UpdateReview(Review instance);
+    partial void DeleteReview(Review instance);
     #endregion
 		
 		public DataClasses1DataContext() : 
@@ -72,6 +78,22 @@ namespace MovieReviewWebService
 				return this.GetTable<UserInfo>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Movie> Movies
+		{
+			get
+			{
+				return this.GetTable<Movie>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Review> Reviews
+		{
+			get
+			{
+				return this.GetTable<Review>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserInfo")]
@@ -85,6 +107,8 @@ namespace MovieReviewWebService
 		private string _Name;
 		
 		private string _Password;
+		
+		private EntitySet<Review> _Reviews;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -100,6 +124,7 @@ namespace MovieReviewWebService
 		
 		public UserInfo()
 		{
+			this._Reviews = new EntitySet<Review>(new Action<Review>(this.attach_Reviews), new Action<Review>(this.detach_Reviews));
 			OnCreated();
 		}
 		
@@ -159,6 +184,481 @@ namespace MovieReviewWebService
 					this._Password = value;
 					this.SendPropertyChanged("Password");
 					this.OnPasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserInfo_Review", Storage="_Reviews", ThisKey="email", OtherKey="user_email")]
+		public EntitySet<Review> Reviews
+		{
+			get
+			{
+				return this._Reviews;
+			}
+			set
+			{
+				this._Reviews.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Reviews(Review entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserInfo = this;
+		}
+		
+		private void detach_Reviews(Review entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserInfo = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Movie")]
+	public partial class Movie : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _name;
+		
+		private int _release_year;
+		
+		private string _genre;
+		
+		private string _director;
+		
+		private string _actors;
+		
+		private string _music;
+		
+		private int _rating;
+		
+		private EntitySet<Review> _Reviews;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void Onrelease_yearChanging(int value);
+    partial void Onrelease_yearChanged();
+    partial void OngenreChanging(string value);
+    partial void OngenreChanged();
+    partial void OndirectorChanging(string value);
+    partial void OndirectorChanged();
+    partial void OnactorsChanging(string value);
+    partial void OnactorsChanged();
+    partial void OnmusicChanging(string value);
+    partial void OnmusicChanged();
+    partial void OnratingChanging(int value);
+    partial void OnratingChanged();
+    #endregion
+		
+		public Movie()
+		{
+			this._Reviews = new EntitySet<Review>(new Action<Review>(this.attach_Reviews), new Action<Review>(this.detach_Reviews));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_release_year", DbType="Int NOT NULL")]
+		public int release_year
+		{
+			get
+			{
+				return this._release_year;
+			}
+			set
+			{
+				if ((this._release_year != value))
+				{
+					this.Onrelease_yearChanging(value);
+					this.SendPropertyChanging();
+					this._release_year = value;
+					this.SendPropertyChanged("release_year");
+					this.Onrelease_yearChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_genre", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string genre
+		{
+			get
+			{
+				return this._genre;
+			}
+			set
+			{
+				if ((this._genre != value))
+				{
+					this.OngenreChanging(value);
+					this.SendPropertyChanging();
+					this._genre = value;
+					this.SendPropertyChanged("genre");
+					this.OngenreChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_director", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string director
+		{
+			get
+			{
+				return this._director;
+			}
+			set
+			{
+				if ((this._director != value))
+				{
+					this.OndirectorChanging(value);
+					this.SendPropertyChanging();
+					this._director = value;
+					this.SendPropertyChanged("director");
+					this.OndirectorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_actors", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string actors
+		{
+			get
+			{
+				return this._actors;
+			}
+			set
+			{
+				if ((this._actors != value))
+				{
+					this.OnactorsChanging(value);
+					this.SendPropertyChanging();
+					this._actors = value;
+					this.SendPropertyChanged("actors");
+					this.OnactorsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_music", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string music
+		{
+			get
+			{
+				return this._music;
+			}
+			set
+			{
+				if ((this._music != value))
+				{
+					this.OnmusicChanging(value);
+					this.SendPropertyChanging();
+					this._music = value;
+					this.SendPropertyChanged("music");
+					this.OnmusicChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_rating", DbType="Int NOT NULL")]
+		public int rating
+		{
+			get
+			{
+				return this._rating;
+			}
+			set
+			{
+				if ((this._rating != value))
+				{
+					this.OnratingChanging(value);
+					this.SendPropertyChanging();
+					this._rating = value;
+					this.SendPropertyChanged("rating");
+					this.OnratingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Movie_Review", Storage="_Reviews", ThisKey="name", OtherKey="Movie")]
+		public EntitySet<Review> Reviews
+		{
+			get
+			{
+				return this._Reviews;
+			}
+			set
+			{
+				this._Reviews.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Reviews(Review entity)
+		{
+			this.SendPropertyChanging();
+			entity.Movie1 = this;
+		}
+		
+		private void detach_Reviews(Review entity)
+		{
+			this.SendPropertyChanging();
+			entity.Movie1 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Reviews")]
+	public partial class Review : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _Movie;
+		
+		private string _user_email;
+		
+		private string _Review1;
+		
+		private int _Id;
+		
+		private EntityRef<Movie> _Movie1;
+		
+		private EntityRef<UserInfo> _UserInfo;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnMovieChanging(string value);
+    partial void OnMovieChanged();
+    partial void Onuser_emailChanging(string value);
+    partial void Onuser_emailChanged();
+    partial void OnReview1Changing(string value);
+    partial void OnReview1Changed();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    #endregion
+		
+		public Review()
+		{
+			this._Movie1 = default(EntityRef<Movie>);
+			this._UserInfo = default(EntityRef<UserInfo>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Movie", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Movie
+		{
+			get
+			{
+				return this._Movie;
+			}
+			set
+			{
+				if ((this._Movie != value))
+				{
+					if (this._Movie1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMovieChanging(value);
+					this.SendPropertyChanging();
+					this._Movie = value;
+					this.SendPropertyChanged("Movie");
+					this.OnMovieChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_email", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string user_email
+		{
+			get
+			{
+				return this._user_email;
+			}
+			set
+			{
+				if ((this._user_email != value))
+				{
+					if (this._UserInfo.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onuser_emailChanging(value);
+					this.SendPropertyChanging();
+					this._user_email = value;
+					this.SendPropertyChanged("user_email");
+					this.Onuser_emailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="Review", Storage="_Review1", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Review1
+		{
+			get
+			{
+				return this._Review1;
+			}
+			set
+			{
+				if ((this._Review1 != value))
+				{
+					this.OnReview1Changing(value);
+					this.SendPropertyChanging();
+					this._Review1 = value;
+					this.SendPropertyChanged("Review1");
+					this.OnReview1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Movie_Review", Storage="_Movie1", ThisKey="Movie", OtherKey="name", IsForeignKey=true)]
+		public Movie Movie1
+		{
+			get
+			{
+				return this._Movie1.Entity;
+			}
+			set
+			{
+				Movie previousValue = this._Movie1.Entity;
+				if (((previousValue != value) 
+							|| (this._Movie1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Movie1.Entity = null;
+						previousValue.Reviews.Remove(this);
+					}
+					this._Movie1.Entity = value;
+					if ((value != null))
+					{
+						value.Reviews.Add(this);
+						this._Movie = value.name;
+					}
+					else
+					{
+						this._Movie = default(string);
+					}
+					this.SendPropertyChanged("Movie1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserInfo_Review", Storage="_UserInfo", ThisKey="user_email", OtherKey="email", IsForeignKey=true)]
+		public UserInfo UserInfo
+		{
+			get
+			{
+				return this._UserInfo.Entity;
+			}
+			set
+			{
+				UserInfo previousValue = this._UserInfo.Entity;
+				if (((previousValue != value) 
+							|| (this._UserInfo.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserInfo.Entity = null;
+						previousValue.Reviews.Remove(this);
+					}
+					this._UserInfo.Entity = value;
+					if ((value != null))
+					{
+						value.Reviews.Add(this);
+						this._user_email = value.email;
+					}
+					else
+					{
+						this._user_email = default(string);
+					}
+					this.SendPropertyChanged("UserInfo");
 				}
 			}
 		}
