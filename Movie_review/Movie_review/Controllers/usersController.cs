@@ -17,17 +17,19 @@ namespace Movie_review.Controllers
     {
         private WebServiceEntities2 db = new WebServiceEntities2();
 
+        
         // GET: api/users
         public IQueryable<user> Getusers()
         {
             return db.users;
         }
-
+       
         // GET: api/users/5
         [ResponseType(typeof(user))]
-        public async Task<IHttpActionResult> Getuser(string id)
+        [Route("Login")]
+        public async Task<IHttpActionResult> Getuser(string email,string pwd)
         {
-            user user = await db.users.FindAsync(id);
+            var user = await db.users.SingleOrDefaultAsync(i => i.email == email && i.pwd == pwd);
             if (user == null)
             {
                 return NotFound();
@@ -38,14 +40,14 @@ namespace Movie_review.Controllers
 
         // PUT: api/users/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Putuser(string id, user user)
+        public async Task<IHttpActionResult> Putuser(string email, user user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.Id)
+            if (email != user.email)
             {
                 return BadRequest();
             }
@@ -58,7 +60,7 @@ namespace Movie_review.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!userExists(id))
+                if (!userExists(email))
                 {
                     return NotFound();
                 }
@@ -73,14 +75,18 @@ namespace Movie_review.Controllers
 
         // POST: api/users
         [ResponseType(typeof(user))]
-        public async Task<IHttpActionResult> Postuser(user user)
+        [Route("UserSignUp")]
+        public async Task<IHttpActionResult> Postuser(user u)
         {
+            user u1 = new user();
+            u1.email = u.email;
+            u1.pwd = u.pwd;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.users.Add(user);
+            db.users.Add(u1);
 
             try
             {
@@ -88,7 +94,7 @@ namespace Movie_review.Controllers
             }
             catch (DbUpdateException)
             {
-                if (userExists(user.Id))
+                if (userExists(u.email))
                 {
                     return Conflict();
                 }
@@ -98,14 +104,14 @@ namespace Movie_review.Controllers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
+            return Ok(u);
         }
 
         // DELETE: api/users/5
         [ResponseType(typeof(user))]
-        public async Task<IHttpActionResult> Deleteuser(string id)
+        public async Task<IHttpActionResult> Deleteuser(string email)
         {
-            user user = await db.users.FindAsync(id);
+            user user = await db.users.FindAsync(email);
             if (user == null)
             {
                 return NotFound();
@@ -126,9 +132,9 @@ namespace Movie_review.Controllers
             base.Dispose(disposing);
         }
 
-        private bool userExists(string id)
+        private bool userExists(string email)
         {
-            return db.users.Count(e => e.Id == id) > 0;
+            return db.users.Count(e => e.email == email) > 0;
         }
     }
 }

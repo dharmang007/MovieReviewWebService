@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="WebServiceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="WebServiceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="Id" />
@@ -30,7 +30,7 @@
             <PropertyRef Name="uid" />
           </Key>
           <Property Name="movieid" Type="int" Nullable="false" />
-          <Property Name="uid" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="uid" Type="int" Nullable="false" />
           <Property Name="comments" Type="nvarchar" MaxLength="200" />
           <Property Name="rating" Type="int" Nullable="false" />
         </EntityType>
@@ -38,9 +38,9 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="uname" Type="nchar" MaxLength="50" Nullable="false" />
-          <Property Name="pwd" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="pwd" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <Association Name="FK_reviews_ToTable">
           <End Role="user" Type="Self.user" Multiplicity="1" />
@@ -80,8 +80,7 @@
             <End Role="reviews" EntitySet="reviews" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WebServiceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -103,67 +102,67 @@
           <Property Name="category" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="year" Type="Int32" Nullable="false" />
           <Property Name="totalreview" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="reviews" Relationship="Self.FK_reviews_ToTable_1" FromRole="movie" ToRole="reviews" />
+          <NavigationProperty Name="reviews" Relationship="WebServiceModel.FK_reviews_ToTable_1" FromRole="movie" ToRole="review" />
         </EntityType>
+        <EntityContainer Name="WebServiceEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="admins" EntityType="Self.admin" />
+          <EntitySet Name="movies" EntityType="Self.movie" />
+          <EntitySet Name="reviews" EntityType="WebServiceModel.review" />
+          <EntitySet Name="users" EntityType="WebServiceModel.user" />
+          <AssociationSet Name="FK_reviews_ToTable_1" Association="WebServiceModel.FK_reviews_ToTable_1">
+            <End Role="movie" EntitySet="movies" />
+            <End Role="review" EntitySet="reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reviews_ToTable" Association="WebServiceModel.FK_reviews_ToTable">
+            <End Role="user" EntitySet="users" />
+            <End Role="review" EntitySet="reviews" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="review">
           <Key>
             <PropertyRef Name="movieid" />
             <PropertyRef Name="uid" />
           </Key>
           <Property Name="movieid" Type="Int32" Nullable="false" />
-          <Property Name="uid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="uid" Type="Int32" Nullable="false" />
           <Property Name="comments" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="rating" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="movie" Relationship="Self.FK_reviews_ToTable_1" FromRole="reviews" ToRole="movie" />
-          <NavigationProperty Name="user" Relationship="Self.FK_reviews_ToTable" FromRole="reviews" ToRole="user" />
+          <NavigationProperty Name="movie" Relationship="WebServiceModel.FK_reviews_ToTable_1" FromRole="review" ToRole="movie" />
+          <NavigationProperty Name="user" Relationship="WebServiceModel.FK_reviews_ToTable" FromRole="review" ToRole="user" />
         </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="uname" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="pwd" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="reviews" Relationship="Self.FK_reviews_ToTable" FromRole="user" ToRole="reviews" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="pwd" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="reviews" Relationship="WebServiceModel.FK_reviews_ToTable" FromRole="user" ToRole="review" />
         </EntityType>
         <Association Name="FK_reviews_ToTable_1">
-          <End Role="movie" Type="Self.movie" Multiplicity="1" />
-          <End Role="reviews" Type="Self.review" Multiplicity="*" />
+          <End Type="WebServiceModel.movie" Role="movie" Multiplicity="1" />
+          <End Type="WebServiceModel.review" Role="review" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="movie">
               <PropertyRef Name="MovieId" />
             </Principal>
-            <Dependent Role="reviews">
+            <Dependent Role="review">
               <PropertyRef Name="movieid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_reviews_ToTable">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
-          <End Role="reviews" Type="Self.review" Multiplicity="*" />
+          <End Type="WebServiceModel.user" Role="user" Multiplicity="1" />
+          <End Type="WebServiceModel.review" Role="review" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="user">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="reviews">
+            <Dependent Role="review">
               <PropertyRef Name="uid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="WebServiceEntities2" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="admins" EntityType="Self.admin" />
-          <EntitySet Name="movies" EntityType="Self.movie" />
-          <EntitySet Name="reviews" EntityType="Self.review" />
-          <EntitySet Name="users" EntityType="Self.user" />
-          <AssociationSet Name="FK_reviews_ToTable_1" Association="Self.FK_reviews_ToTable_1">
-            <End Role="movie" EntitySet="movies" />
-            <End Role="reviews" EntitySet="reviews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_reviews_ToTable" Association="Self.FK_reviews_ToTable">
-            <End Role="user" EntitySet="users" />
-            <End Role="reviews" EntitySet="reviews" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -194,19 +193,19 @@
           <EntitySetMapping Name="reviews">
             <EntityTypeMapping TypeName="WebServiceModel.review">
               <MappingFragment StoreEntitySet="reviews">
-                <ScalarProperty Name="movieid" ColumnName="movieid" />
-                <ScalarProperty Name="uid" ColumnName="uid" />
-                <ScalarProperty Name="comments" ColumnName="comments" />
                 <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="movieid" ColumnName="movieid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="WebServiceModel.user">
               <MappingFragment StoreEntitySet="user">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="uname" ColumnName="uname" />
                 <ScalarProperty Name="pwd" ColumnName="pwd" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

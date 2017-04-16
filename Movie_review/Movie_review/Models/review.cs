@@ -15,7 +15,7 @@ namespace Movie_review.Models
     public partial class review
     {
         public int movieid { get; set; }
-        public string uid { get; set; }
+        public int uid { get; set; }
         public string comments { get; set; }
         public int rating { get; set; }
     

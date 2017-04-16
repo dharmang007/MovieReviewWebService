@@ -20,8 +20,8 @@ namespace Movie_review.Models
             this.reviews = new HashSet<review>();
         }
     
-        public string Id { get; set; }
-        public string uname { get; set; }
+        public int Id { get; set; }
+        public string email { get; set; }
         public string pwd { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
