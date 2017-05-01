@@ -15,9 +15,11 @@ namespace Movie_review.Controllers
 {
     public class moviesController : ApiController
     {
+        HttpClient client = new HttpClient();
         private WebServiceEntities2 db = new WebServiceEntities2();
 
         // GET: api/movies
+        [HttpGet]
         public IQueryable<movie> Getmovies()
         {
             return db.movies;
@@ -25,11 +27,12 @@ namespace Movie_review.Controllers
 
         // GET: api/movies/5
         [ResponseType(typeof(movie))]
-        public async Task<IHttpActionResult> Getmovie(int id)
+        public async Task<IHttpActionResult> Getmovie(string name)
         {
-            movie movie = await db.movies.FindAsync(id);
+            movie movie = await db.movies.FindAsync(name);
             if (movie == null)
             {
+
                 return NotFound();
             }
 
@@ -38,14 +41,14 @@ namespace Movie_review.Controllers
 
         // PUT: api/movies/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Putmovie(int id, movie movie)
+        public async Task<IHttpActionResult> Putmovie(string name , movie movie)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != movie.MovieId)
+            if (name != movie.name)
             {
                 return BadRequest();
             }
@@ -58,7 +61,7 @@ namespace Movie_review.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!movieExists(id))
+                if (!movieExists(name))
                 {
                     return NotFound();
                 }
@@ -88,7 +91,7 @@ namespace Movie_review.Controllers
             }
             catch (DbUpdateException)
             {
-                if (movieExists(movie.MovieId))
+                if (movieExists(movie.name))
                 {
                     return Conflict();
                 }
@@ -126,9 +129,9 @@ namespace Movie_review.Controllers
             base.Dispose(disposing);
         }
 
-        private bool movieExists(int id)
+        private bool movieExists(string name)
         {
-            return db.movies.Count(e => e.MovieId == id) > 0;
+            return db.movies.Count(e => e.name == name) > 0;
         }
     }
 }
